@@ -1,6 +1,7 @@
 import { RFValue } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 import { Feather }  from '@expo/vector-icons';
+import { RectButton } from 'react-native-gesture-handler';
 
 interface CategoryProps {
   isActive: boolean;
@@ -26,7 +27,7 @@ export const Title = styled.Text`
   color: ${({theme}) => theme.colors.shape};
 `;
 
-export const Category = styled.TouchableOpacity<CategoryProps>`
+export const Category = styled(RectButton)<CategoryProps>`
   width: 100%;
   padding: ${RFValue(15)}px;
   flex-direction: row;
