@@ -71,8 +71,6 @@ const Register: React.FC = () => {
     try {
       const dataStorage = await AsyncStorage.getItem(dataKey);
       const currentData = dataStorage ? JSON.parse(dataStorage) : []
-      
-      console.log(dataStorage);
 
       const dataFormatted = [
         ...currentData,
@@ -91,7 +89,6 @@ const Register: React.FC = () => {
       navigate('Listagem')
 
     } catch(error) {
-      console.log(22222, error)
       Alert.alert('Não foi possível cadastrar')
     }
   }
