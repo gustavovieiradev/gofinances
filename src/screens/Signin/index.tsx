@@ -1,5 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import { ActivityIndicator, Alert } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { useTheme } from 'styled-components';
 
 import AppleSvg from '../../assets/apple.svg';
 import GoogleSvg from '../../assets/google.svg';
@@ -18,9 +20,33 @@ import {
 } from './styles';
 
 const Signin: React.FC = () => {
-  const data = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const { signInWithGoogle, signInWithApple } = useAuth();
+  const theme = useTheme();
 
-  console.log(data);
+  async function handleSignInWithGoogle() {
+    try {
+      setIsLoading(true);
+      return await signInWithGoogle();
+    } catch (err) {
+      console.error(err);
+      Alert.alert('Não foi possível conectar a conta Google');
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function handleSignInWithApple() {
+    try {
+      setIsLoading(true);
+      return await signInWithApple();
+    } catch (err) {
+      console.error(err);
+      Alert.alert('Não foi possível conectar a conta Google');
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <Container>
@@ -37,9 +63,24 @@ const Signin: React.FC = () => {
       </Header>
       <Footer>
         <FooterWrapper>
-          <SigninSocialButton svg={GoogleSvg} title="Entrar com Google" />
-          <SigninSocialButton svg={AppleSvg} title="Entrar com Apple" />
+          <SigninSocialButton
+            svg={GoogleSvg}
+            title="Entrar com Google"
+            onPress={handleSignInWithGoogle}
+          />
+          <SigninSocialButton
+            svg={AppleSvg}
+            title="Entrar com Apple"
+            onPress={handleSignInWithApple}
+          />
         </FooterWrapper>
+
+        {isLoading && (
+          <ActivityIndicator
+            color={theme.colors.shape}
+            style={{ marginTop: 18 }}
+          />
+        )}
       </Footer>
     </Container>
   );
