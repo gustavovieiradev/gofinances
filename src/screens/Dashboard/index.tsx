@@ -49,10 +49,18 @@ const Dashboard: React.FC = () => {
     collection: DataListProps[],
     type: 'positive' | 'negative'
   ) => {
+    const collectionFiltered = collection.filter(
+      (transaction) => transaction.type === type
+    );
+
+    if (collectionFiltered.length === 0) {
+      return '';
+    }
+
     const lastTransactions = new Date(
       Math.max.apply(
         Math,
-        collection
+        collectionFiltered
           .filter((d) => d.type === type)
           .map((d) => new Date(d.date).getTime())
       )
@@ -116,7 +124,9 @@ const Dashboard: React.FC = () => {
       transactions,
       'negative'
     );
-    const totalInterval = `01 a ${lastTransactionsEntries}`;
+    const totalInterval = lastTransactionsEntries
+      ? `01 a ${lastTransactionsEntries}`
+      : 'Não há transações';
 
     const total = entriesSum - expensiveSum;
 
@@ -180,13 +190,21 @@ const Dashboard: React.FC = () => {
         <HighlightCard
           title="Entradas"
           amount={highlightData.entries?.amount}
-          lastTransaction={`Última entrada ${highlightData.entries?.lastTransaction}`}
+          lastTransaction={
+            highlightData.entries?.lastTransaction
+              ? `Última entrada ${highlightData.entries?.lastTransaction}`
+              : 'Não há transações'
+          }
           type="up"
         />
         <HighlightCard
           title="Saídas"
           amount={highlightData.expensives?.amount}
-          lastTransaction={`Última saída ${highlightData.expensives?.lastTransaction}`}
+          lastTransaction={
+            highlightData.expensives?.lastTransaction
+              ? `Última saída ${highlightData.expensives?.lastTransaction}`
+              : 'Não há transações'
+          }
           type="down"
         />
         <HighlightCard
